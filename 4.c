@@ -2,18 +2,13 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 
 // child die first
 int main(void)
 {
     pid_t pid = fork();
-
-    if (pid < 0)
-    {
-        perror("fork");
-        return 1;
-    }
-
+    wait(NULL);
     if (pid == 0)
     {
         printf("Child: PID = %d\n", getpid());
@@ -26,7 +21,6 @@ int main(void)
         
         printf("Parent: PID = %d, initial PPID = %d\n",getpid(), getppid());
         printf("Parent not dead yet... and is waiting for the child to die.\n");
-        wait(NULL);
         printf("Parent: New PPID = %d\n", getppid());
         printf("Parent is left alive alone...\n");
     }

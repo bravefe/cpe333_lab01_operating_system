@@ -8,12 +8,6 @@ int main(void)
 {
     pid_t pid = fork();
 
-    if (pid < 0)
-    {
-        perror("fork");
-        return 1;
-    }
-
     if (pid == 0)
     {
         printf("Child: PID = %d, initial PPID = %d\n",getpid(), getppid());
