@@ -242,13 +242,7 @@ int main(void)
     pipe(fd);
 
     pid_t pid = fork();
-
-    if (pid < 0)
-    {
-        perror("fork");
-        return 1;
-    }
-
+    wait(NULL);
     if (pid == 0)
     {
         close(fd[0]);
@@ -300,7 +294,7 @@ Parent: Hello from child PID: 9022
 ![7.png Results](picture/7.png)
 
 #### Discussion
-
+The program uses a pipe to allow the child process to send a message to the parent process. The child writes its PID into the pipe, and the parent reads the message and prints it. However, the output shows Hello from child PID: 9022, which matches the parent PID rather than the child PID 9021. This is because the child creates the message using `getpid()`.
 
 ---
 
