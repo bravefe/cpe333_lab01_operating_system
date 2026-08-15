@@ -56,7 +56,7 @@ Hello World! PID = 11243
 ```
 
 #### Discussion
-After adding `wait()`, the parent waits for the child to finish. Therefore, the child prints its PID first, and the parent prints its PID afterward. Making the first PID 1124 from the child and 11243 from the parent.
+After adding `wait()`, the parent waits for the child to finish. Therefore, the child prints its PID first, and the parent prints its PID afterward. Making the first PID 11244 from the child and 11243 from the parent.
 
 ### Output Screenshot
 ![1-2.jpg Results](picture/1-2.jpg)
