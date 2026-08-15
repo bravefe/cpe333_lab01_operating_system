@@ -24,7 +24,6 @@ int main(void)
 
     if (pid == 0)
     {
-        // Child = sender
         close(fd[0]);
 
         printf("Child: Child PID: %d\n", getpid());
@@ -40,7 +39,7 @@ int main(void)
     }
     else
     {
-        // Parent = receiver
+
         close(fd[1]);
 
         printf("Parent: Parent PID: %d\n", getpid());
