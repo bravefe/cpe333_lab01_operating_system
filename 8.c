@@ -14,9 +14,9 @@ int main(void)
 
     if (pid == 0)
     {
-        char buffer[100];
+        char buffer[99];
 
-        write(fd[1], "Hello from child", 17);
+        write(fd[1], "Hello from child", strlen("Hello from child") + 1);
 
         read(fd[0], buffer, sizeof(buffer));
 

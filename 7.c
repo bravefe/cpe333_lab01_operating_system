@@ -7,12 +7,7 @@
 int main(void)
 {
     int fd[2];
-
-    if (pipe(fd) == -1)
-    {
-        perror("pipe");
-        return 1;
-    }
+    pipe(fd);
 
     pid_t pid = fork();
 
@@ -28,7 +23,7 @@ int main(void)
 
         printf("Child: Child PID: %d\n", getpid());
 
-        char message[100];
+        char message[30];
 
         snprintf(message, sizeof(message),
                  "Hello from child PID: %d", getpid());
@@ -44,7 +39,7 @@ int main(void)
 
         printf("Parent: Parent PID: %d\n", getpid());
 
-        char buffer[100];
+        char buffer[99];
 
         ssize_t bytes_read = read(fd[0], buffer, sizeof(buffer));
 

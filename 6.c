@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
+// don't put this in final pdf
 int fork_count(int count)
 {
     pid_t pid = fork();

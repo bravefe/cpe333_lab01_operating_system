@@ -16,16 +16,16 @@ int main(void)
     {
         close(fd[0]);
 
-        sleep(3);
+        sleep(2);
 
-        write(fd[1], "Delayed message", 16);
+        write(fd[1], "Hello from child", strlen("Hello from child") + 1);
 
         close(fd[1]);
         exit(0);
     }
     else
     {
-        char buffer[100];
+        char buffer[99];
 
         close(fd[1]);
 

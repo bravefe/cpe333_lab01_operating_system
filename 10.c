@@ -24,7 +24,7 @@ int main(void)
     }
     else
     {
-        char buffer[100];
+        char buffer[99];
 
         close(fd[1]);
 
