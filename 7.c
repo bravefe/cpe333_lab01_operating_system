@@ -10,7 +10,6 @@ int main(void)
     pipe(fd);
 
     pid_t pid = fork();
-    wait(NULL);
     if (pid == 0)
     {
         close(fd[0]);
