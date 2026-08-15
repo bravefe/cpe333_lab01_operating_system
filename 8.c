@@ -25,6 +25,7 @@ int main(void)
         close(fd[0]);
         close(fd[1]);
         exit(0);
+        
     }
     else
     {
