@@ -414,7 +414,7 @@ The parent tries to `read()` from the pipe before the child sends its message. S
 ### Output Screenshot
 ![8-9.png Results](picture/8-9.png)
 
-### 5.3 Sender Sends Multiple Messages Before Receiver Reads (10.c)
+### 5.3 Sender Sends 3 Messages Before Receiver Reads `10.c`
 
 #### Code
 ```c
