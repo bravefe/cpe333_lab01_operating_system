@@ -15,9 +15,9 @@ int main(void)
     {
         close(fd[0]);
 
-        write(fd[1], "Hello from child 1", strlen("Hello from child") + 1);
-        write(fd[1], "Hello from child 2", strlen("Hello from child") + 1);
-        write(fd[1], "Hello from child 3", strlen("Hello from child") + 1);
+        write(fd[1], "Hello from child 1", strlen("Hello from child 1") + 1);
+        write(fd[1], "Hello from child 2", strlen("Hello from child 2") + 1);
+        write(fd[1], "Hello from child 3", strlen("Hello from child 3") + 1);
 
         close(fd[1]);
         exit(0);

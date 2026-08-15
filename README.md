@@ -289,7 +289,7 @@ Child: Child PID: 10373
 Parent: Hello from child PID: 10373
 ```
 #### Discussion
-The child writes a message containing its PID into the pipe, while the parent reads and displays the message. The parent read and dis play the child PID which is 10373.
+The child `write()` a message containing its PID into the pipe, while the parent `read()` and displays the message. The parent `read()` and displays the child's PID, which is 10373.
 
 #### Output Screenshot
 ![7.png Results](picture/7.png)
@@ -351,7 +351,7 @@ Child read: Hello from child
 ```
 
 #### Discussion
-
+The child `write()` a message into the pipe and then `read()` from the same pipe. Since the message is stored in the pipe, the child is able to `read()` back its own message, displaying "Hello from child".
 
 ### 5.2 Receiver Reads Before Sender `9.c`
 
@@ -409,7 +409,10 @@ Parent received: Hello from child
 ```
 
 #### Discussion
+The parent tries to `read()` from the pipe before the child sends its message. Since the pipe is empty, the `read()` function waits until the child writes data into the pipe. After 2 seconds, the child sends the message, and the parent receives and displays it.
 
+### Output Screenshot
+![8-9.png Results](picture/8-9.png)
 
 ### 5.3 Sender Sends Multiple Messages Before Receiver Reads (10.c)
 
@@ -432,9 +435,9 @@ int main(void)
     {
         close(fd[0]);
 
-        write(fd[1], "Hello from child 1", strlen("Hello from child") + 1);
-        write(fd[1], "Hello from child 2", strlen("Hello from child") + 1);
-        write(fd[1], "Hello from child 3", strlen("Hello from child") + 1);
+        write(fd[1], "Hello from child 1", strlen("Hello from child 1") + 1);
+        write(fd[1], "Hello from child 2", strlen("Hello from child 2") + 1);
+        write(fd[1], "Hello from child 3", strlen("Hello from child 3") + 1);
 
         close(fd[1]);
         exit(0);
@@ -461,13 +464,20 @@ int main(void)
 ```
 
 #### Results
+##### The code above
 ```bash
 Parent received:
-Hello from childHello from childHello from child
+Hello from child 1
 ```
-
+##### Remove the `+ 1` after teh `strlen()`
+```bash
+Parent received:
+Hello from child 1Hello from child 2Hello from child 3
+```
 #### Discussion
+The child sends three separate messages into the pipe before the parent `read()` them. The messages are stored in the pipe until the parent calls read(). With + 1 included in each `write()`, each message contains a null terminator (\0), so the parent only displays the first message.
 
+When `+ 1` is removed, no null terminator is included between the messages, so the parent displays all three messages together.
 
 ### Output Screenshot
-![8-9-10.png Results](picture/8-9-10.png)
+![10.png Results](picture/10.png)
