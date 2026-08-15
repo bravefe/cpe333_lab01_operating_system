@@ -79,12 +79,6 @@ int main(void)
 {
     pid_t pid = fork();
 
-    if (pid < 0)
-    {
-        perror("fork");
-        return 1;
-    }
-
     if (pid == 0)
     {
         printf("Child: PID = %d, initial PPID = %d\n",getpid(), getppid());
@@ -93,6 +87,7 @@ int main(void)
 
         printf("Child: New PPID = %d\n", getppid());
         printf("Child not dead yet...\n");
+        system("ps -f");
     }
     else
     {
@@ -102,19 +97,23 @@ int main(void)
         printf("The parent was brutally murdered, but the child is still running.\n");
         exit(0);
     }
-
     return 0;
 }
 ```
 
 #### Results
 ```bash
-Parent: PID = 6930
+Child: PID = 9761, initial PPID = 9760
+Parent: PID = 9760
 Parent not dead yet...
-Child: PID = 6931, initial PPID = 6930
 The parent was brutally murdered, but the child is still running.
 Child: New PPID = 2212
 Child not dead yet...
+UID          PID    PPID  C STIME TTY          TIME CMD
+ubuntu      5685    5672  0 14:33 pts/0    00:00:01 bash
+ubuntu      9761    2212  0 16:17 pts/0    00:00:00 ./3
+ubuntu      9762    9761  0 16:17 pts/0    00:00:00 sh -c -- ps -f
+ubuntu      9763    9762 99 16:17 pts/0    00:00:00 ps -f
 ```
 
 #### Discussion
@@ -128,64 +127,52 @@ The parent has PID 6930, while the child has PID 6931 and initially has a PPID o
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 
 // child die first
 int main(void)
 {
     pid_t pid = fork();
-
-    if (pid < 0)
-    {
-        perror("fork");
-        return 1;
-    }
-
+    wait(NULL);
     if (pid == 0)
     {
         printf("Child: PID = %d\n", getpid());
         printf("Child not dead YET...\n");
 
         printf("The child fell from high place, but the parent did nothing and is still running outside.\n");
-
-        exit(0);
-
-        printf("asdjkfl;asjdkl;fajdskl;fjasdkl;fjaskld;fjkls;sd");
     }
     else
     {
+        
         printf("Parent: PID = %d, initial PPID = %d\n",getpid(), getppid());
         printf("Parent not dead yet... and is waiting for the child to die.\n");
-        system("ps -f");
         printf("Parent: New PPID = %d\n", getppid());
         printf("Parent is left alive alone...\n");
+        system("ps -f");
     }
-
     return 0;
 }
 ```
 
 #### Results
 ```bash
-Parent: PID = 6939, initial PPID = 5685
-Parent not dead yet... and is waiting for the child to die.
-Child: PID = 6940
-Child not dead yet...
+Child: PID = 9765
+Child not dead YET...
 The child fell from high place, but the parent did nothing and is still running outside.
-
-UID      PID  PPID C STIME TTY          TIME CMD
-ubuntu  5685  5672 0 17:36 pts/0    00:00:01 bash
-ubuntu  6939  5685 0 17:48 pts/0    00:00:00 ./4
-ubuntu  6940  6939 0 17:48 pts/0    00:00:00 [4] <defunct>
-ubuntu  6941  6939 0 17:48 pts/0    00:00:00 sh -c -- ps -f
-ubuntu  6942  6941 0 17:48 pts/0    00:00:00 ps -f
-
+Parent: PID = 9764, initial PPID = 5685
+Parent not dead yet... and is waiting for the child to die.
 Parent: New PPID = 5685
 Parent is left alive alone...
+UID          PID    PPID  C STIME TTY          TIME CMD
+ubuntu      5685    5672  0 14:33 pts/0    00:00:01 bash
+ubuntu      9764    5685  0 16:17 pts/0    00:00:00 ./4
+ubuntu      9766    9764  0 16:17 pts/0    00:00:00 sh -c -- ps -f
+ubuntu      9767    9766  0 16:17 pts/0    00:00:00 ps -f
 ```
 
 
 #### Discussion
-The parent has PID 6939, while the child has PID 6940. The child `exit()`, The ps -f output shows the child as <defunct>, meaning it has become a zombie, while the parent continues running. The parent remains alive with its initial PPID of 5685.
+The parent has PID 9764, while the child has PID 9765. The child finis, while the parent continues running. The parent remains alive with its initial PPID of 5685.
   
 ### Output Screenshot
 ![3-4.png Results](picture/3-4.png)

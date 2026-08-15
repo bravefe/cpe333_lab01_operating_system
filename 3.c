@@ -16,6 +16,7 @@ int main(void)
 
         printf("Child: New PPID = %d\n", getppid());
         printf("Child not dead yet...\n");
+        system("ps -f");
     }
     else
     {
@@ -25,6 +26,5 @@ int main(void)
         printf("The parent was brutally murdered, but the child is still running.\n");
         exit(0);
     }
-    system("ps -f");
     return 0;
 }

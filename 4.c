@@ -23,7 +23,7 @@ int main(void)
         printf("Parent not dead yet... and is waiting for the child to die.\n");
         printf("Parent: New PPID = %d\n", getppid());
         printf("Parent is left alive alone...\n");
+        system("ps -f");
     }
-    system("ps -f");
     return 0;
 }
