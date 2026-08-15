@@ -117,7 +117,7 @@ ubuntu      9763    9762 99 16:17 pts/0    00:00:00 ps -f
 ```
 
 #### Discussion
-The parent has PID 6930, while the child has PID 6931 and initially has a PPID of 6930, showing that 6930 is its parent. After the parent `exit()` the child continues running after its parent has terminated. Its PPID then changes from 6930 to 2212.
+The parent has PID 9760, while the child has PID 9761 and initially has a PPID of 9760, showing that 9760 is its parent. After the parent calls `exit()`, the child continues running even though its parent has terminated. Its PPID then changes from 9760 to 2212, indicating that the child has been adopted by another process.
 
 ### 2.2 Child Dies First `4.c`
 
@@ -172,7 +172,7 @@ ubuntu      9767    9766  0 16:17 pts/0    00:00:00 ps -f
 
 
 #### Discussion
-The parent has PID 9764, while the child has PID 9765. The child finis, while the parent continues running. The parent remains alive with its initial PPID of 5685.
+The parent has PID 9764, while the child has PID 9765. The child terminates first, while the parent continues running. The parent stays alive, and its PPID remains 5685 because the shell is still running. The `wait()` call causes the parent to wait until the child terminates before continuing.
   
 ### Output Screenshot
 ![3-4.png Results](picture/3-4.png)
@@ -213,13 +213,15 @@ Successfully called fork() 2874 times.
 #### Output Screenshot:
 ![5.png Results](picture/5.png)
 
-#### Discussion
-
 ### 3.1 Multiple Program
 #### Results
 ```bash
 Successfully called fork() 1730 times.
 ```
+
+### Discussion
+The program was able to successfully call fork() 2,874 times when running alone. When multiple copies of the program were running at the same time, it was able to call fork() 1,730 times. The number was lower because multiple programs were using the system's process resources at the same time.
+
 #### Output Screenshot:
 ![6.png Results](picture/6.png)
 ---
