@@ -4,11 +4,19 @@
 
 int main(void)
 {
-    fork();
-
+    pid_t pid = fork();
     wait(NULL);
 
-    printf("Hello World! PID = %d\n", getpid());
+    if (pid == 0)
+    {
+        // Child process
+        printf("Child: PID = %d\n", getpid());
+    }
+    else
+    {
+        // Parent process waits for the child
+        printf("Parent: PID = %d\n", getpid());
+    }
 
     return 0;
 }

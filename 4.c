@@ -20,20 +20,16 @@ int main(void)
         printf("Child not dead YET...\n");
 
         printf("The child fell from high place, but the parent did nothing and is still running outside.\n");
-
-
-        exit(0);
-
-        printf("asdjkfl;asjdkl;fajdskl;fjasdkl;fjaskld;fjkls;sd");
     }
     else
     {
+        
         printf("Parent: PID = %d, initial PPID = %d\n",getpid(), getppid());
         printf("Parent not dead yet... and is waiting for the child to die.\n");
-        system("ps -f");
+        wait(NULL);
         printf("Parent: New PPID = %d\n", getppid());
         printf("Parent is left alive alone...\n");
     }
-
+    system("ps -f");
     return 0;
 }
