@@ -15,7 +15,45 @@ typedef struct {
 
 
 void simulate_stfc(Process *procs, int n) {
-    //your implementation
+    int time = 0;
+    int completed = 0;
+
+    while (completed < n) {
+        int selected = -1;
+
+        for (int i = 0; i < n; i++) {
+            if (procs[i].arrival <= time &&
+                !procs[i].finished) {
+
+                if (selected == -1) {
+                    selected = i;
+                }
+                else if (procs[i].remaining < procs[selected].remaining) {
+                    selected = i;
+                }
+                else if (procs[i].remaining == procs[selected].remaining &&
+                         procs[i].pid < procs[selected].pid) {
+                    selected = i;
+                }
+            }
+        }
+
+        if (selected == -1) {
+            printf("Time %d: IDLE\n", time);
+            time++;
+            continue;
+        }
+
+        printf("Time %d: P%d\n", time, procs[selected].pid);
+
+        procs[selected].remaining--;
+        time++;
+
+        if (procs[selected].remaining == 0) {
+            procs[selected].finished = 1;
+            completed++;
+        }
+    }
 }
 
 int main(int argc, char *argv[]) {
