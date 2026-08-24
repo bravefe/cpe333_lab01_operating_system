@@ -18,6 +18,15 @@ void simulate_stfc(Process *procs, int n) {
     int time = 0;
     int completed = 0;
 
+
+    for (int i = 0; i < n; i++) {
+        printf("PID=%d | Arrival=%d | Burst=%d | Remaining=%d\n",
+               procs[i].pid,
+               procs[i].arrival,
+               procs[i].burst,
+               procs[i].remaining);
+    }
+    printf("\n");
     while (completed < n) {
         int selected = -1;
 
@@ -44,7 +53,11 @@ void simulate_stfc(Process *procs, int n) {
             continue;
         }
 
-        printf("Time %d: P%d\n", time, procs[selected].pid);
+        printf(
+        "Time %d: PID=%d | Remaining=%d",
+        time,
+        procs[selected].pid,
+        procs[selected].remaining);
 
         procs[selected].remaining--;
         time++;
@@ -52,8 +65,15 @@ void simulate_stfc(Process *procs, int n) {
         if (procs[selected].remaining == 0) {
             procs[selected].finished = 1;
             completed++;
+
+            printf(" | DONE at %d", time);
         }
+
+        printf("\n");
     }
+    printf("\n");
+    printf("Total time: %d\n", time);
+    printf("Processes completed: %d/%d\n", completed, n);
 }
 
 int main(int argc, char *argv[]) {
