@@ -3,7 +3,7 @@
 ### Static Storage Class 
 **Step 1:** Compile and run this program 3 times, copy the output and put it in your report, explain why the result show up that way
 
-**Output**
+
 ```text
 The value of y is 6
 The address of y is 0x5595aa281010
@@ -47,7 +47,7 @@ PSLR can randomize the addresses of the stack, heap, and, when PIE is enabled, t
 **Step 2:** Modify the code by delete the `static` word, compile, and re-run the program.
 **Step 3:** Copy the output and put it in your report, explain why the results show up that way, and discuss the difference between both outputs.
 
-**Output**
+
 ```text
 The value of y is 6
 The address of y is 0x7ffecc8e85c0
@@ -91,7 +91,7 @@ Although a new automatic y is created on each iteration, the compiler can reuse 
 
 **Step 4.1:** With `static`.
 
-**Output**
+
 ```text
 The value of y is 6
 The address of y is 0x404018
@@ -128,7 +128,7 @@ When using `-no-pie`, PIE is disabled. This means the executable and statiac dat
 ---
 **Step 4.2:** Without `static`.
 
-**Output**
+
 ```text
 The value of y is 6
 The address of y is 0x7ffc878a8570
@@ -186,7 +186,7 @@ The address of the non-static variable remains the same within an execution beca
 ## Extern Storage Class
 **Step 1:** Compile and run this program 3 times, copy the output and put it in your report, explain why the result show up that way
 
-**Output**
+
 ```text
  Print value of x: 20
  Adress of x (in main function): 0x6096408c2010
@@ -215,7 +215,7 @@ However, the address changes between separate executions. This happens similar t
 **Step 2:** Modify the code by delete the `extern` word, compile, and re-run the program.
 **Step 3:** Copy the output and put it in your report, explain why the results show up that way, and discuss the difference between both outputs.
 
-**Output**
+
 ```text
  Print value of x: 0
  Adress of x (in main function): 0x7fff82c07e54
@@ -248,7 +248,7 @@ Without extern, the x variables used by `main()` and `display()` are separate lo
 
 **Step 4.1:** With `extern`.
 
-**Output**
+
 ```text
  Print value of x: 20
  Adress of x (in main function): 0x404018
@@ -276,7 +276,7 @@ The program was compiled using -no-pie. This means the executable is loaded at a
 ---
 **Step 4.2:** Without `extern`.
 
-**Output**
+
 ```text
  Print value of x: 0
  Adress of x (in main function): 0x7fffc1a84ba4
@@ -327,7 +327,7 @@ Same with in `1.`, when compiling with `-no-pie`, PIE is disabled. In this exper
 **Step 1:** Run this program (without ‘-no-pie’): 
 **Step 2:** Copy the output and put it in your report 
 
-**Output**
+
 ```text
 Address of Pointer
 >>0x7ffc40e5f770
@@ -415,7 +415,7 @@ Thus, the output demonstrates that a and c are stored in different memory areas 
 **Step 4:** Modify the code by uncomment 2 places, and re-run this program
 **Step 5:** Copy the output and put it in your report
 
-**Output**
+
 ```text
 Address of Pointer
 >>0x7ffc5f9c7f40
