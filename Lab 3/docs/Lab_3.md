@@ -77,9 +77,9 @@ The value of y is 6
 The address of y is 0x7fff2e816410
 ```
 **Explanation**
-Without `static`, y becomes an automatic local variable. Its lifetime lasts only until the function/block finishes executing, after which it is destroyed. It is typically stored on the stack, while y with `static` is typically stored in the data segment. Therefore, their memory addresses can be far apart because they are stored in different memory segments. because they are stored in different memory segments.Each time the loop enters the block, y is initialized to 5. The statement y++ then changes it to 6. When the iteration ends, the lifetime of that automatic variable ends. On the next iteration, y is initialized to 5 again, so the printed value is always 6.
+Without `static`, y becomes an automatic local variable. Its lifetime lasts only until the function/block finishes executing, after which it is destroyed. It is typically stored on the stack. Therefore, their memory addresses can be far apart because they are stored in different memory segments. Each time the loop enters the block, y is initialized to 5. The statement y++ then changes it to 6. When the iteration ends, the lifetime of that automatic variable ends. On the next iteration, y is initialized to 5 again, so the printed value is always 6.
 
-Although a new automatic y is created on each iteration, the compiler can reuse the same stack memory location because the previous y has reached the end of its lifetime. Therefore, the address can remain the same across iterations. However, the stack address can change between separate executions because of ASLR.
+Although a new automatic y is created on each iteration, the compiler can reuse the same stack memory location because the previous y has reached the end of its lifetime. Therefore, in this experiment the address can remain the same across iterations. However, the stack address can change between separate executions because of ASLR.
 
 ---
 
@@ -123,7 +123,7 @@ The address of y is 0x404018
 **Explanation**
 With static, y keeps its value between loop iterations, so the output is 6, 7, and 8. Its address remains the same because all iterations use the same variable similar to step 1.
 
-When using `-no-pie`, PIE is disabled. This means the executable is loaded at a fixed memory address instead of being relocated to a different address between executions. Since the `static` variable y is stored in the executable's data section, its address is also fixed. Therefore, y has the address `0x404018` in every execution.
+When using `-no-pie`, PIE is disabled. This means the executable and statiac data is loaded at a fixed memory address instead of being relocated to a different address. Since the `static` variable y, y has the address `0x404018` in every execution.
 
 ---
 **Step 4.2:** Without `static`.
@@ -161,7 +161,7 @@ The address of y is 0x7ffe8940b570
 
 Without `static`, y is an automatic variable that is recreated and initialized to 5 during each loop iteration. Therefore, its value is always 6 after `y++`. Its address remains also remain the same within each execution because the same stack location can be reused for y on each loop iteration similar to step 3.
 
- However diffrent from step 4.1, the address changes between separate executions because y is an automatic variable stored on the stack, and `-no-pie` does not disable ASLR. Therefore, the stack can be located at a different virtual address each time the program runs.
+However diffrent from step 4.1, the address changes between separate executions because y is an automatic variable stored on the stack which is outside the range affected by PIE randomization, and `-no-pie` does not disable ASLR. Therefore, the stack can be located at a different virtual address each time the program runs.
 
 Therefore, `-no-pie` makes the static variable's address fixed in this environment, but it does not affect the stack address of the automatic variable. As a result, the non-static variable shows essentially the same address behavior with or without `-no-pie`.
 
