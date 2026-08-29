@@ -125,7 +125,6 @@ When using `-no-pie`, PIE is disabled. This means the executable is loaded at a 
 
 ASLR is still enabled, but it does not change the address of y because the executable was compiled without PIE. ASLR can still randomize other memory regions, such as the stack and heap.
 
-
 ---
 **Step 4.2:** Without `static`.
 
@@ -185,5 +184,127 @@ The address of the non-static variable remains the same within an execution beca
 --- 
 
 ## Extern Storage Class
+**Step 1:** Compile and run this program 3 times, copy the output and put it in your report, explain why the result show up that way
 
-**Step 1:** Compile and run this program 3 times, copy the output and put it in your report, explain why the result show up that way 
+**Output**
+```text
+ Print value of x: 20
+ Adress of x (in main function): 0x6096408c2010
+
+ Display value of x: 20
+ Adress of x (in display function): 0x6096408c2010
+
+ Print value of x: 20
+ Adress of x (in main function): 0x5e1a18ca0010
+
+ Display value of x: 20
+ Adress of x (in display function): 0x5e1a18ca0010
+
+ Print value of x: 20
+ Adress of x (in main function): 0x5cc33dfb4010
+
+ Display value of x: 20
+ Adress of x (in display function): 0x5cc33dfb4010
+```
+**Explanation**
+
+---
+**Step 2:** Modify the code by delete the `extern` word, compile, and re-run the program.
+**Step 3:** Copy the output and put it in your report, explain why the results show up that way, and discuss the difference between both outputs.
+
+**Output**
+```text
+ Print value of x: 0
+ Adress of x (in main function): 0x7fff82c07e54
+
+ Display value of x: 0
+ Adress of x (in display function): 0x7fff82c07e34
+
+ Print value of x: 0
+ Adress of x (in main function): 0x7ffe0b6ab584
+
+ Display value of x: 0
+ Adress of x (in display function): 0x7ffe0b6ab564
+
+ Print value of x: 0
+ Adress of x (in main function): 0x7fff1070bd64
+
+ Display value of x: 0
+ Adress of x (in display function): 0x7fff1070bd44
+```
+**Explanation**
+
+
+---
+
+**Step 4:** Redo step 1-3, but this time compile the program using: 
+ ```bash
+“gcc -no-pie -o <your executable object name> <your c code name>” 
+ ```
+ Are they different? Why or why not 
+
+**Step 4.1:** With `extern`.
+
+**Output**
+```text
+ Print value of x: 20
+ Adress of x (in main function): 0x404018
+
+ Display value of x: 20
+ Adress of x (in display function): 0x404018
+
+ Print value of x: 20
+ Adress of x (in main function): 0x404018
+
+ Display value of x: 20
+ Adress of x (in display function): 0x404018
+
+ Print value of x: 20
+ Adress of x (in main function): 0x404018
+
+ Display value of x: 20
+ Adress of x (in display function): 0x404018
+```
+**Explanation**
+
+
+---
+**Step 4.2:** Without `extern`.
+
+**Output**
+```text
+ Print value of x: 0
+ Adress of x (in main function): 0x7fffc1a84ba4
+
+ Display value of x: 0
+ Adress of x (in display function): 0x7fffc1a84b84
+
+ Print value of x: 0
+ Adress of x (in main function): 0x7ffcb85d5c74
+
+ Display value of x: 0
+ Adress of x (in display function): 0x7ffcb85d5c54
+
+ Print value of x: 0
+ Adress of x (in main function): 0x7ffcfbecac14
+
+ Display value of x: 0
+ Adress of x (in display function): 0x7ffcfbecabf4
+
+```
+**Explanation**
+
+
+---
+
+**Comparison**
+| Case | Value of `x` | Address of `x` in main function | Address of `x` in display function  |
+| - | - | - | - |
+| `static`, normal compilation | 6  -> 7  -> 8 | Same | Change |
+| non-`static`, normal compilation | 6  -> 6  -> 6 | Same in this experiment | Change |
+| `static`, `-no-pie` | 6  -> 7  -> 8 | Same | Same in this environment |
+| non-`static`, `-no-pie` | 6  -> 6  -> 6 | Same in this experiment | Change |
+
+Overall,
+
+--- 
