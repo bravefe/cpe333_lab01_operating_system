@@ -185,3 +185,5 @@ The address of the non-static variable remains the same within an execution beca
 --- 
 
 ## Extern Storage Class
+
+**Step 1:** Compile and run this program 3 times, copy the output and put it in your report, explain why the result show up that way 
