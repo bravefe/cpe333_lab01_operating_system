@@ -33,12 +33,13 @@ The value of y is 8
 The address of y is 0x56a375d25010
 ```
 **Explanation**
-```c
-auto int x = 3;
-```
 `auto` gives x automatic storage duration. The variable is initialized to 3 when `main()` begins. During each loop iteration, x is decremented by 1. Its values are 3, 2, and 1 during the three iterations, after which it becomes 0 and the condition `x > 0` becomes false. Therefore, the loop executes exactly three times.
 
-The variable y is declared with `static` This means that y is created once and exists for the entire lifetime of the program. That is why y went from 6 to 7 and 8. However, the address may be different when the program is executed again because the program's memory layout can change between executions when PIE and ASLR are enabled.
+The variable y is declared with `static` This means that y is created once and exists for the entire lifetime of the program. That is why y went from 6 to 7 and 8 because of y++ in each loop. However, the address may be different when the program is executed again because the program's memory layout can change between executions when PIE and ASLR are enabled.
+
+Address Space Layout Randomization (ASLR): It randomize the memory of the Program evertime it start.
+
+Position-Independent Executable (PIE) allows the main executable to be loaded at different virtual memory addresses. When PIE is combined with ASLR, the base address of the executable can change between executions.
 
 ---
 **Step 2:** Modify the code by delete the `static` word, compile, and re-run the program.
@@ -74,15 +75,15 @@ The value of y is 6
 The address of y is 0x7fff2e816410
 ```
 **Explanation**
-Without static, y becomes an automatic local variable. is executed each time the program enters the block containing the declaration. Therefore, each loop iteration starts with 5 and y++ to 6, but when the next iteration begins, a new y is initialized.
+Without `static`, y has automatic storage duration. Each time the loop enters the block, y is initialized to 5. The statement y++ then changes it to 6. When the iteration ends, the lifetime of that automatic variable ends. On the next iteration, y is initialized to 5 again, so the printed value is always 6.
 
-The result show that all the y even in diffrent program has the same adresss. The compiler can reuse the same stack location for a local variable because the previous y is no longer needed. The important difference is the lifetime/value, not simply the printed address.
+Although a new automatic y is created on each iteration, the compiler can reuse the same stack memory location because the previous y has reached the end of its lifetime. Therefore, the address can remain the same across iterations. However, the stack address can change between separate executions because of ASLR.
 
 ---
 
 **Step 4:** Redo step 1-3, but this time compile the program using: 
  ```bash
-“gcc -no-pie -o <your executable object name> <your c code name>”  
+“gcc -no-pie -o <your executable object name> <your c code name>” 
  ```
  Are they different? Why or why not 
 
@@ -120,7 +121,10 @@ The address of y is 0x404018
 **Explanation**
 With static, y keeps its value between loop iterations, so the output is 6, 7, and 8. Its address remains the same because all iterations use the same variable.
 
-Using `-no-pie` disables Position Independent Executable (PIE), so the static variable is placed at a fixed address. Therefore, the address is 0x404018 in every execution instead of changing between runs.
+When using `-no-pie`, PIE is disabled. This means the executable is loaded at a fixed memory address instead of being relocated to a different address between executions. Since the `static` variable y is stored in the executable's data section, its address is also fixed. Therefore, y has the address `0x404018` in every execution.
+
+ASLR is still enabled, but it does not change the address of y because the executable was compiled without PIE. ASLR can still randomize other memory regions, such as the stack and heap.
+
 
 ---
 **Step 4.2:** Without `static`.
@@ -158,9 +162,26 @@ The address of y is 0x7ffe8940b570
 
 Without `static`, y is an automatic variable that is recreated and initialized to 5 during each loop iteration. Therefore, its value is always 6 after `y++`.
 
-Its address stays the same within each program because the same stack location can be reused. However, the address changes between program because y is stored on the stack, and `-no-pie` does not disable ASLR for stack addresses.
+Its address remains the same within each execution because the same stack location can be reused for y on each loop iteration. However, the address changes between separate executions because y is an automatic variable stored on the stack, and `-no-pie`does not disable ASLR. Therefore, the stack can be located at a different virtual address each time the program runs.
 
-Therefore, `-no-pie` makes the static variable's address fixed, but it does not make the stack address of an automatic variable fixed.
-
+Therefore, `-no-pie` makes the static variable's address fixed in this environment, but it does not affect the stack address of the automatic variable. As a result, the non-static variable shows essentially the same address behavior with or without `-no-pie`.
 
 ---
+
+**Comparison**
+| Case | Value of `y` | Address within execution | Address between executions |
+| - | - | - | - |
+| `static`, normal compilation | 6  -> 7  -> 8 | Same | Change |
+| non-`static`, normal compilation | 6  -> 6  -> 6 | Same in this experiment | Change |
+| `static`, `-no-pie` | 6  -> 7  -> 8 | Same | Same in this environment |
+| non-`static`, `-no-pie` | 6  -> 6  -> 6 | Same in this experiment | Change |
+
+Overall, the main difference is the effect of `static` and `-no-pie` on the variable's lifetime and address. With static, y retains its value between loop iterations, producing 6 → 7 → 8. Without static, y is recreated and initialized to 5 on each iteration, so the output remains 6 → 6 → 6.
+
+Without `-no-pie`, the address of the static variable changes between separate executions because PIE allows the executable to be relocated and ASLR randomizes the memory layout. When `-no-pie` is used, the main executable is not position-independent, so the static variable's address remains fixed in this environment at 0x404018.
+
+The address of the non-static variable remains the same within an execution because the compiler can reuse the same stack location. However, its address changes between executions because it is stored on the stack, and ASLR can randomize the stack location. Therefore, using `-no-pie` does not make the address of the automatic variable fixed.
+
+--- 
+
+## Extern Storage Class
