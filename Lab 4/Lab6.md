@@ -1,5 +1,6 @@
 ## 1. Understand the concept of virtual memory 
 ### 1.1 Explain and compare how virtual memory is implemented in modern Linux and MS Windows? 
+Virtual memory is a memory management technique that gives each process its own virtual address space. When RAM does not have enough space to keep all required pages in memory, the operating system can move some pages to secondary storage, such as a disk or SSD, which is much slower than RAM. The operating system and CPU translate virtual addresses into physical RAM addresses using page tables.
 
 ### 1.2 Show step-by-step how to increase or decrease swap space in Linux withscreenshots. 
  
