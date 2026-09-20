@@ -5,23 +5,25 @@
 #include <time.h>
 
 /*
-    ./ps7 x y
+    ./ps7 x y z
 
     x = number of threads (machines)
     y = mode (0 = without forced context switch, 1 = forced context switch)
+    z = number of jackpots per machine
 
-    task 1: ./ps7 1 0
-    task 2: ./ps7 4 0
-    task 3: ./ps7 4 1
+    task 1: ./ps7 1 0 500
+    task 2: ./ps7 3 0 500
+    task 3: ./ps7 3 1 500
 */
 
 long money;
 
+int jackpotsPerMachine;
 int mode;
 
 #define JACKPOT_PAYOUT 1000
-#define MAX_JACKPOT_PER_MACHINE 500000
 
+// #define MAX_JACKPOT_PER_MACHINE 5000
 
 void *SlotMachineJackpotPayout(void *arg)
 {
@@ -33,10 +35,10 @@ void *SlotMachineJackpotPayout(void *arg)
             money = money - JACKPOT_PAYOUT;
         } 
         else {
-            long temp = money;
-            temp = temp - JACKPOT_PAYOUT;
+            long reg = money;
+            reg = reg - JACKPOT_PAYOUT;
             sched_yield();
-            money = temp;
+            money = reg;
         }
     }
 
@@ -48,14 +50,15 @@ int main(int argc, char *argv[])
 {
     int machine = (argc > 1) ? atoi(argv[1]) : 1;
     mode = (argc > 2) ? atoi(argv[2]) : 0;
+    jackpotsPerMachine = (argc > 3) ? atoi(argv[3]) : 500;
 
     srand(time(NULL));
     int *jackpotPerMachine = malloc(sizeof(int) * machine);
 
 
     for (int i = 0; i < machine; i++) {
-
-        jackpotPerMachine[i] = (rand() % MAX_JACKPOT_PER_MACHINE) + 1;
+        jackpotPerMachine[i] = jackpotsPerMachine;
+        // jackpotPerMachine[i] = (rand() % MAX_JACKPOT_PER_MACHINE) + 1;
     }
 
     long startingMoney = 0;
@@ -85,7 +88,7 @@ int main(int argc, char *argv[])
     printf("== Settings ==\n");
     printf("machine             = %d\n", machine);
     printf("JACKPOT PAYOUT      = %d\n",JACKPOT_PAYOUT);
-    printf("MAX JACKPOT/MACHINE = %d\n",MAX_JACKPOT_PER_MACHINE);
+    // printf("MAX JACKPOT/MACHINE = %d\n",MAX_JACKPOT_PER_MACHINE);
     printf("mode                = %s\n\n",
            mode ? "forced" : "not forced");
 
@@ -104,9 +107,11 @@ int main(int argc, char *argv[])
 
 
     if (money != expected) {
-        printf("> RACE CONDITION DETECTED (%ld)\n", money - expected);
+        printf("> RACE CONDITION DETECTED (%ld) %ld payout\n", startingMoney - money, (startingMoney - money)/JACKPOT_PAYOUT);
 
-    } else {
+       
+    } 
+    else {
         printf("> payout correctly\n");
     }
 
