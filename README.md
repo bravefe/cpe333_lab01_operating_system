@@ -25,6 +25,10 @@
 - A tutorial video on how to install your Linux of your choice
 - A slide accompany the presentation addresses the learning outcomes
 
+### Note
+
+https://support.broadcom.com/group/ecx/productdownloads?subfamily=VMware%20Workstation%20Pro&freeDownloads=true
+
 # Project #2
 
 ## Linux kernel module
