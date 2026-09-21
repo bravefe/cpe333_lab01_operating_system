@@ -1,8 +1,7 @@
 # Operating System Projects 1/2025 edition
 
 **Project Directory:** [Project](./Project)
-
-**Google Drive:**
+**Google Drive:** https://drive.google.com/drive/folders/1N6sGUb9PTeJYLiS3C1UNaLr2JUUZfBuQ?usp=sharing
 
 ## General Information
 
