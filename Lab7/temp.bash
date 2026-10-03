@@ -291,3 +291,4 @@ Philosopher 4 put down forks 4 and 0
 Philosopher 4 is thinking
 Philosopher 3 got RIGHT fork 4
 Philosopher 3 is eating
+...
