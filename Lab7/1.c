@@ -12,18 +12,19 @@ int right(int p) {return (p + 1) % N;}
 
 void think(int p) {
     printf("Philosopher %d is thinking\n", p);
-    usleep(100000);
+    sleep(1);
 }
 
 void eat(int p) {
     printf("Philosopher %d is eating\n", p);
-    usleep(200000);
+    sleep(2);
 }
 
 void getforks(int p) {
     printf("Philosopher %d tries to get LEFT fork %d\n", p, left(p));
     sem_wait(&forks[left(p)]);
     printf("Philosopher %d got LEFT fork %d\n", p, left(p));
+    sleep(1);
     printf("Philosopher %d tries to get RIGHT fork %d\n", p, right(p));
     sem_wait(&forks[right(p)]);
     printf("Philosopher %d got RIGHT fork %d\n", p, right(p));
