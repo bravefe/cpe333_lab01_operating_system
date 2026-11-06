@@ -107,7 +107,9 @@ Level 2 link is now unaccesable.
                5 File(s)         49,667 bytes
 ```
 
-it goes on for a while...
+it goes on for a etenity...
+
+#### Can you create a link on drive D: to source on drive C:
 
 ## 12.2: Linux’s File Type: Named Pipe
 
