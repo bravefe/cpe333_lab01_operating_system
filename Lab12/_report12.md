@@ -2,8 +2,6 @@
 
 ## 12.1: Symbolic and hard Link
 
-### Discussion
-
 ### Linux
 
 ### Window
@@ -29,11 +27,11 @@ MKLINK [[/D] | [/H] | [/J]] Link Target
 - soft: `mklink symlink.txt source.txt`
 - hard: `mklink /H hardlink.txt source.txt`
 
-![result](photo/windowLink1.png)
+![result](photo/win/windowLink1.png)
 
 ##### After delete the source file
 
-![result](photo/winDelSource1.png)
+![result](photo/win/winDelSource1.png)
 
 - hardlink.txt still works.
 - symlink.txt cannot access its deleted target and are now unaccesable.
@@ -43,7 +41,7 @@ MKLINK [[/D] | [/H] | [/J]] Link Target
 - level1: `mklink 1.txt source.txt`
 - level2: `mklink 2.txt 1.txt`
 
-![alt text](photo/winLv.png)
+![alt text](photo/win/winLv.png)
 
 ##### After delete the source file
 
@@ -57,12 +55,12 @@ Level 2 link is now unaccesable.
 
 `mklink /D folderLink sourceFolder`
 
-![alt text](photo/winFolder.png)
+![alt text](photo/win/winFolder.png)
 
 #### Create a link that create a loop back to upper-level folder.
 
 `mklink /D sourceFolder\parentLink ..`
-![alt text](photo/winLoop.png)
+![alt text](photo/win/winLoop.png)
 
 `dir /s`
 
