@@ -2,7 +2,113 @@
 
 ## 12.1: Symbolic and hard Link
 
+### Discussion
+
 ### Linux
+
+#### `ln --help`
+
+```bash
+Make links between files.
+
+Usage: ln [OPTION]... [-T] TARGET LINK_NAME
+       ln [OPTION]... TARGET
+       ln [OPTION]... TARGET... DIRECTORY
+       ln [OPTION]... -t DIRECTORY TARGET...
+
+Arguments:
+  <files>...  
+
+Options:
+      --backup[=<CONTROL>]            make a backup of each existing destination file
+  -b                                  like --backup but does not accept an argument
+  -f, --force                         remove existing destination files
+  -i, --interactive                   prompt whether to remove existing destination files
+  -n, --no-dereference                treat LINK_NAME as a normal file if it is a
+                                      symbolic link to a directory
+  -L, --logical                       follow TARGETs that are symbolic links
+  -P, --physical                      make hard links directly to symbolic links
+  -s, --symbolic                      make symbolic links instead of hard links
+  -S, --suffix <SUFFIX>               override the usual backup suffix
+  -t, --target-directory <DIRECTORY>  specify the DIRECTORY in which to create the links
+  -T, --no-target-directory           treat LINK_NAME as a normal file always
+  -r, --relative                      create symbolic links relative to link location
+  -v, --verbose                       print name of each linked file
+  -h, --help                          Print help
+  -V, --version                       Print version
+
+In the 1st form, create a link to TARGET with the name LINK_NAME.
+In the 2nd form, create a link to TARGET in the current directory.
+In the 3rd and 4th forms, create links to each TARGET in DIRECTORY.
+Create hard links by default, symbolic links with --symbolic.
+By default, each destination (name of new link) should not already exist.
+When creating hard links, each TARGET must exist. Symbolic links
+can hold arbitrary text; if later resolved, a relative link is
+interpreted in relation to its parent directory.
+
+The backup suffix is '~', unless set with --suffix or SIMPLE_BACKUP_SUFFIX.
+The version control method may be selected via the --backup option or through
+the VERSION_CONTROL environment variable.  Here are the values:
+
+  none, off       never make backups (even if --backup is given)
+  numbered, t     make numbered backups
+  existing, nil   numbered if numbered backups exist, simple otherwise
+  simple, never   always make simple backups
+```
+
+#### Create hard/soft links
+
+- soft: `ln -s source.txt symlink.txt`
+- hard: `ln source.txt hardlink.txt`
+
+![result](photo/1.png)
+
+##### After delete the source file
+
+![result](photo/2.png)
+
+- hardlink.txt still works.
+- symlink.txt cannot access its deleted target and are now unaccesable.
+
+#### Create level 1 and create level 2 link
+
+- level1: `ln -s source.txt 1.txt`
+- level2: `ln -s 1.txt 2.txt`
+
+![alt text](photo/3.png)
+
+##### After delete the source file
+
+Both level 1 and 2 link are now unaccesable.
+
+##### After delete level 1 link
+
+Level 2 link is now unaccesable.
+
+#### Create a link to directory or folder.
+
+`ln -s folderA folderLink`
+
+#### Create a link that create a loop back to upper-level folder.
+
+`ln -s .. folderA/parentLink`
+![alt text](photo/4.png)
+
+`ls -R`
+
+```bash
+.:
+1.txt  2.txt  _PS12_2025.pdf  _report12.md  folderLink  hardlink.txt  photo  source.txt  sourceFolder  symlink.txt
+
+./photo:
+1.png  2.png  3.png  4.png  win
+
+./photo/win:
+winDelSource1.png  winFolder.png  winLoop.png  winLv.png  windowLink1.png
+
+./sourceFolder:
+adasdjkfjds.py  parentLink  test.txt
+```
 
 ### Window
 
