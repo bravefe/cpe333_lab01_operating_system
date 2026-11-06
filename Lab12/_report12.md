@@ -17,7 +17,7 @@ Usage: ln [OPTION]... [-T] TARGET LINK_NAME
        ln [OPTION]... -t DIRECTORY TARGET...
 
 Arguments:
-  <files>...  
+  <files>...
 
 Options:
       --backup[=<CONTROL>]            make a backup of each existing destination file
@@ -168,7 +168,7 @@ Level 2 link is now unaccesable.
 `mklink /D sourceFolder\parentLink ..`
 ![alt text](photo/win/winLoop.png)
 
-`dir /s`
+`dir /s` (need to run as administrator)
 
 ```bash
  Directory of D:\KMUTT\Year 3\Operating System\Lab12\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\sourceFolder\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\sourceFolder\parentLink\sourceFolder\parentLink\sourceFolder\parentLink\folderLink
@@ -217,7 +217,19 @@ it goes on for a etenity...
 
 #### Can you create a link on drive D: to source on drive C:
 
+`mklink /H "D:\KMUTT\Year 3\Operating System\Lab12\diskHardlink.txt" "C:\Users\paipa\Downloads\sprint-1-planning-updated.md"`
+
+```bash
+The system cannot move the file to a different disk drive.
+```
+
+`mklink "D:\KMUTT\Year 3\Operating System\Lab12\diskHardlink.txt" "C:\Users\paipa\Downloads\sprint-1-planning-updated.md"` (need to run as administrator)
+
 ## 12.2: Linux’s File Type: Named Pipe
+
+```bash
+symbolic link created for D:\KMUTT\Year 3\Operating System\Lab12\diskHardlink.txt <<===>> C:\Users\paipa\Downloads\sprint-1-planning-updated.md
+```
 
 ---
 
