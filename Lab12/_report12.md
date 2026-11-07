@@ -226,7 +226,7 @@ In both experiments, `2.txt` points to `1.txt`, and `1.txt` points to `source.tx
 
 #### 3. Directory links and recursive listing
 
-The Linux `ln -s` command and Windows `mklink /D` can create links to directories. The `parentLink` link points to `..`, while `folderLink` points to the source directory, creating a path that can return to the same directories repeatedly. In the recorded Linux output, `ls -R` lists the link itself but does not recursively follow the linked directory by default. Windows `dir /s` in this experiment follows the directory links and prints the same folders under increasingly long paths. Recursive traversal through a loop can produce excessive output or run into path and system limits. remove one of the directory links to break the loop before doing further recursive listings. A directory symbolic link is not a hard link: ordinary hard links to directories are generally prohibited because they could create such cycles.
+The Linux `ln -s` command and Windows `mklink /D` can create links to directories. The `parentLink` link points to `..`, while `folderLink` points to the source directory, creating a path that can return to the same directories repeatedly. In the recorded Linux output, `ls -R` lists the link itself but does not recursively follow the linked directory by default. Windows `dir /s` in this experiment follows the directory links and prints the same folders under increasingly long paths. Recursive traversal through a loop can produce excessive output or run into path and system limits. remove one of the directory links to break the loop before doing further recursive listings. A directory symbolic link is not a hard link, ordinary hard links to directories are generally prohibited because they could create such cycles.
 
 #### 4. Creating a link across drives or filesystems
 
@@ -237,6 +237,61 @@ A hard link cannot cross filesystem/volume boundaries. `ln` fails when source an
 ---
 
 ## 12.2: Linux’s File Type: Named Pipe
+
+Create a named pipe (FIFO) named `pipe`:
+
+```bash
+mkfifo pipe
+ls -la
+ls -la pipe
+```
+
+`ls -la`
+
+```bash
+total 176
+drwxrwxr-x  4 pai pai   4096 Nov  7 10:14 .
+drwxrwxr-x 13 pai pai   4096 Nov  7 10:14 ..
+lrwxrwxrwx  1 pai pai     10 Nov  6 22:18 1.txt -> source.txt
+lrwxrwxrwx  1 pai pai      5 Nov  6 22:19 2.txt -> 1.txt
+-rw-rw-r--  1 pai pai 135428 Nov  6 22:02 _PS12_2025.pdf
+-rw-rw-r--  1 pai pai  12294 Nov  7 10:15 _report12.md
+lrwxrwxrwx  1 pai pai     53 Nov  7 09:47 diskHardlink.txt -> C:/Users/paipa/Downloads/sprint-1-planning-updated.md
+lrwxrwxrwx  1 pai pai     12 Nov  6 22:02 folderLink -> sourceFolder
+-rw-rw-r--  2 pai pai      5 Nov  6 22:14 hardlink.txt
+drwxrwxr-x  3 pai pai   4096 Nov  6 22:21 photo
+prw-rw-r--  1 pai pai      0 Nov  7 10:14 pipe
+-rw-rw-r--  1 pai pai     13 Nov  6 22:15 source.txt
+drwxrwxr-x  2 pai pai   4096 Nov  7 10:04 sourceFolder
+lrwxrwxrwx  1 pai pai     10 Nov  6 22:12 symlink.txt -> source.txt
+```
+
+`prw-rw-r--  1 pai pai      0 Nov  7 10:14 pipe`
+
+### Cat Pipe Experiment
+
+Open two terminals and run two command.
+
+```bash
+cat > pipe
+```
+
+
+```bash
+cat pipe
+```
+
+Type `hello linux in read` from fill `cat pipe` and `hello linux from write` in `cat > pip`
+
+![alt text](photo\2.1.png)
+
+### Concept and Explanation
+
+A named pipe, also called a FIFO (first in, first out), is a special filesystem object that lets separate processes communicate. Unlike a regular file, it does not store the transferred data for later reading. The kernel passes bytes written to the pipe to a process reading from it, in order, using a temporary buffer.
+
+In the `ls -la` output, the first character in `prw-rw-r--` is `p`, identifying `pipe` as a named pipe. Its displayed size is `0` because it is not a regular file containing stored bytes; data is consumed through the pipe instead.
+
+`cat > pipe` copies standard input into the pipe, while `cat pipe` copies data from the pipe to its standard output. Opening a FIFO for reading or writing normally waits until a process opens the other end, which is why the two terminals must run their commands together. The reader receives each line as the writer sends it. Ctrl+D ends the writer's terminal input, causing the writing `cat` to close the FIFO; once the buffered data has been read, the reader gets end-of-file and exits.
 
 ---
 
