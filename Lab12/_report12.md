@@ -2,7 +2,6 @@
 
 ## 12.1: Symbolic and hard Link
 
-### Discussion
 
 ### Linux
 
@@ -17,7 +16,7 @@ Usage: ln [OPTION]... [-T] TARGET LINK_NAME
        ln [OPTION]... -t DIRECTORY TARGET...
 
 Arguments:
-  <files>...
+  <files>...  
 
 Options:
       --backup[=<CONTROL>]            make a backup of each existing destination file
@@ -168,7 +167,7 @@ Level 2 link is now unaccesable.
 `mklink /D sourceFolder\parentLink ..`
 ![alt text](photo/win/winLoop.png)
 
-`dir /s` (need to run as administrator)
+`dir /s`
 
 ```bash
  Directory of D:\KMUTT\Year 3\Operating System\Lab12\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\sourceFolder\parentLink\folderLink\parentLink\folderLink\parentLink\folderLink\parentLink\sourceFolder\parentLink\sourceFolder\parentLink\sourceFolder\parentLink\folderLink
@@ -213,23 +212,31 @@ Level 2 link is now unaccesable.
                5 File(s)         49,667 bytes
 ```
 
-it goes on for a etenity...
+it goes on for a while...
 
-#### Can you create a link on drive D: to source on drive C:
+### Discussion
 
-`mklink /H "D:\KMUTT\Year 3\Operating System\Lab12\diskHardlink.txt" "C:\Users\paipa\Downloads\sprint-1-planning-updated.md"`
+#### 1. Hard links and symbolic links to files
 
-```bash
-The system cannot move the file to a different disk drive.
-```
+Create two different kinds of links. A hard link is another directory entry for the same file data. Removing the original name does not remove the data while another hard-link name remains, so `hardlink.txt` can still be opened. A symbolic link stores a path to its target instead of sharing the target's file data. When `source.txt` is removed, `symlink.txt` remains but its stored path no longer resolves, so it is a dangling link. Windows show the same practical distinction on the tested filesystem.
 
-`mklink "D:\KMUTT\Year 3\Operating System\Lab12\diskHardlink.txt" "C:\Users\paipa\Downloads\sprint-1-planning-updated.md"` (need to run as administrator)
+#### 2. Links made through another link
+
+In both experiments, `2.txt` points to `1.txt`, and `1.txt` points to `source.txt`. Accessing `2.txt` therefore requires every link in that path to resolve. Deleting `source.txt` makes both links unusable even though the link files remain. Deleting `1.txt` also makes `2.txt` dangling because its immediate target is gone. Relative symbolic-link targets are resolved from the directory containing each link; this is why the relative names in these examples work while all three files are in the same directory.
+
+#### 3. Directory links and recursive listing
+
+The Linux `ln -s` command and Windows `mklink /D` can create links to directories. The `parentLink` link points to `..`, while `folderLink` points to the source directory, creating a path that can return to the same directories repeatedly. In the recorded Linux output, `ls -R` lists the link itself but does not recursively follow the linked directory by default. Windows `dir /s` in this experiment follows the directory links and prints the same folders under increasingly long paths. Recursive traversal through a loop can produce excessive output or run into path and system limits. remove one of the directory links to break the loop before doing further recursive listings. A directory symbolic link is not a hard link: ordinary hard links to directories are generally prohibited because they could create such cycles.
+
+#### 4. Creating a link across drives or filesystems
+
+A symbolic link can refer to a target on another drive or filesystem, provided the target path is valid and the operating system and filesystem support symbolic links. For example, from Windows Command Prompt, a link located on `D:` can refer to a source on `C:`. Deleting or moving the source leaves a link whose target cannot be found. 
+
+A hard link cannot cross filesystem/volume boundaries. `ln` fails when source and link are on different mounted filesystems, and Windows `mklink /H` requires both names to be on the same volume. Thus, a link on `D:` to a source on `C:` can be made as a symbolic link, but not as a hard link.
+
+---
 
 ## 12.2: Linux’s File Type: Named Pipe
-
-```bash
-symbolic link created for D:\KMUTT\Year 3\Operating System\Lab12\diskHardlink.txt <<===>> C:\Users\paipa\Downloads\sprint-1-planning-updated.md
-```
 
 ---
 
